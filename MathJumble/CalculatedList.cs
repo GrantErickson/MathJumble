@@ -9,9 +9,7 @@ namespace MathJumble
     public class CalculatedList<T> : List<T>
     {
         public CalculatedList() { }
-        public CalculatedList(List<T> list){
-            this.AddRange(list);
-        }
+
         public CalculatedList(CalculatedList<T> list)
         {
             this.AddRange(list);

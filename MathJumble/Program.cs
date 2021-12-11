@@ -21,6 +21,8 @@ namespace MathJumble
         {
             decimal target = 576;
             var startingNumbers = new CalculatedList<decimal> { 4, 7, 10, 15, 25, 50 };
+            var allowFractions = false;
+            var allowNegatives = false;
             //decimal target = 5;
             //var startingNumbers = new CalculatedList<decimal> { 1, 2, 3 };
             var wins = new List<CalculatedList<decimal>>();
@@ -40,22 +42,24 @@ namespace MathJumble
                     try
                     {
                         var result = fx.Value(list[0], list[1]);
-                        if (result.ToString().Length < 6)
-                        {
-                            list.Calculations.Add($"{list[0]}{fx.Key}{list[1]}={result}");
-                            list.RemoveAt(1);
-                            list.RemoveAt(0);
-                            list.Add(result);
-                            if (result == target)
+                        if ((result == (int)result || allowFractions) && (result >= 0 || allowNegatives)) {
+                            if (result.ToString().Length < 6)
                             {
-                                wins.Add(list);
-                            }
-                            if (list.Count > 1)
-                            {
-                                if (!_all.ContainsKey(list.StringifyOrdered()))
+                                list.Calculations.Add($"{list[0]}{fx.Key}{list[1]}={result}");
+                                list.RemoveAt(1);
+                                list.RemoveAt(0);
+                                list.Add(result);
+                                if (result == target)
                                 {
-                                    _all.Add(list.StringifyOrdered(), list);
-                                    remaining.PermuteAdd(list);
+                                    wins.Add(list);
+                                }
+                                if (list.Count > 1)
+                                {
+                                    if (!_all.ContainsKey(list.StringifyOrdered()))
+                                    {
+                                        _all.Add(list.StringifyOrdered(), list);
+                                        remaining.PermuteAdd(list);
+                                    }
                                 }
                             }
                         }
